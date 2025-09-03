@@ -35,7 +35,7 @@ public class ProductRepository {
 
     // Create a new product
     public int createProduct(Product product) {
-        String sql = "INSERT INTO PRODUCT (ID, NAME, BARCODE, PRICE, CREATED_AT, UPDATED_AT) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PRODUCT (ID, NAME, BARCODE, CREATED_AT, UPDATED_AT) VALUES (?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql,
                 product.getId().toString(),
                 product.getName(),
@@ -59,7 +59,7 @@ public class ProductRepository {
 
     // Update product
     public int updateProduct(Product product) {
-        String sql = "UPDATE PRODUCT SET NAME = ?, BARCODE = ?, PRICE = ?, UPDATED_AT = ? WHERE ID = ?";
+        String sql = "UPDATE PRODUCT SET NAME = ?, BARCODE = ?, UPDATED_AT = ? WHERE ID = ?";
         return jdbcTemplate.update(sql,
                 product.getName(),
                 product.getBarCode(),

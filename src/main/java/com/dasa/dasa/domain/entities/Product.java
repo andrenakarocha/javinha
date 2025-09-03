@@ -12,7 +12,7 @@ public class Product extends BaseEntity {
     private Name name;
     private Barcode barcode;
 
-    // Getters e Setters
+    // Getters
     public String getName() {
         return name.getValue();
     }
