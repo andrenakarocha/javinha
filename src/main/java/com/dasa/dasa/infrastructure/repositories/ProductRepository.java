@@ -1,7 +1,6 @@
 package com.dasa.dasa.infrastructure.repositories;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -12,28 +11,27 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.dasa.dasa.domain.entities.Product;
+import com.dasa.dasa.domain.interfaces.IProductRepository;
 
 @Repository
-public class ProductRepository {
+public class ProductRepository implements IProductRepository{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     // RowMapper converting DB rows into Product entities
-    private RowMapper<Product> productRowMapper = new RowMapper<>() {
-        @Override
-        public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
-            String id = rs.getString("ID");
-            String name = rs.getString("NAME");
-            String barcode = rs.getString("BARCODE");
-            LocalDateTime createdAt = rs.getTimestamp("CREATED_AT").toLocalDateTime();
-            LocalDateTime updatedAt = rs.getTimestamp("UPDATED_AT").toLocalDateTime();
-
-            return Product.fromDb(id, name, barcode, createdAt, updatedAt);
-        }
+    final RowMapper<Product> productRowMapper = (ResultSet rs, int rowNum) -> {
+        String id = rs.getString("ID");
+        String name = rs.getString("NAME");
+        String barcode = rs.getString("BARCODE");
+        LocalDateTime createdAt = rs.getTimestamp("CREATED_AT").toLocalDateTime();
+        LocalDateTime updatedAt = rs.getTimestamp("UPDATED_AT").toLocalDateTime();
+        
+        return Product.fromDb(id, name, barcode, createdAt, updatedAt);
     };
 
     // Create a new product
+    @Override
     public int createProduct(Product product) {
         String sql = "INSERT INTO PRODUCT (ID, NAME, BARCODE, CREATED_AT, UPDATED_AT) VALUES (?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql,
@@ -52,6 +50,7 @@ public class ProductRepository {
     }
 
     // Get product by ID
+    @Override
     public Product findById(UUID id) {
         String sql = "SELECT * FROM PRODUCT WHERE ID = ?";
         return jdbcTemplate.queryForObject(sql, productRowMapper, id.toString());

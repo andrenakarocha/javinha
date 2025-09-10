@@ -1,11 +1,13 @@
 package com.dasa.dasa.application.usecases;
 
-import java.util.Optional;
 import java.util.UUID;
 
-import com.dasa.dasa.domain.entities.*;
+import org.springframework.stereotype.Service;
+
+import com.dasa.dasa.domain.entities.Product;
 import com.dasa.dasa.domain.interfaces.IProductRepository;
 
+@Service
 public class GetProductByIdUseCase {
     private final IProductRepository repository;
 
@@ -13,7 +15,7 @@ public class GetProductByIdUseCase {
         this.repository = repository;
     }
 
-    public Optional<Product> execute(String rawId) {
+    public Product execute(String rawId) {
         UUID id = UUID.fromString(rawId);
         return repository.findById(id);
     }
